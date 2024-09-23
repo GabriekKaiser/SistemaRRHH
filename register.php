@@ -35,24 +35,3 @@
     </div>
 </body>
 </html>
-
-<?php
-require 'database.php';
-
-if (!empty($_POST['username']) && !empty($_POST['email']) && !empty($_POST['password'])) { //Verificar si los campos no estan vacios
-    $sql = "INSERT INTO users (username, email, password) VALUES (:username, :email, :password)"; //Preparar la consulta
-    $stmt = $conn->prepare($sql); //Preparar la consulta
-    $stmt->bindParam(':username', $_POST['username']); //Asignar valores a los parametros
-    $stmt->bindParam(':email', $_POST['email']); //Asignar valores a los parametros
-    $stmt->bindParam(':password', password_hash($_POST['password'], PASSWORD_BCRYPT)); //Asignar valores a los parametros
-
-    if ($stmt->execute()) { //Ejecutar la consulta
-        $message = 'Usuario creado exitosamente'; //Mensaje de exito
-        $_SESSION['user_id'] = $results['id']; // Almacenar el id del usuario en la sesion
-        header("Location: home.php"); //Redirigir a home.php
-    } else {
-        $message = 'Lo siento, hubo un problema al crear tu cuenta'; //Mensaje de error
-    }
-}
-
-?>
